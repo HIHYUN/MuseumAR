@@ -24,4 +24,14 @@ MonoBehaviour:
     m_Size: {x: 0.124740124, y: 0.1}
     m_SpecifySize: 1
     m_Name: Bong
-    m_Texture: {fileID: 2800000, guid: f9f3465287768485580ddc996f78881d, type: 3}
+    m_Texture: {fileID: 0}
+  - m_SerializedGuid:
+      m_GuidLow: 5386185645215544009
+      m_GuidHigh: 17775484803871755421
+    m_SerializedTextureGuid:
+      m_GuidLow: 322504786906587885
+      m_GuidHigh: 8665967028830047641
+    m_Size: {x: 0.1, y: 0.1}
+    m_SpecifySize: 1
+    m_Name: AIR
+    m_Texture: {fileID: 0}
