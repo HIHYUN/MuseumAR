@@ -12,7 +12,7 @@ public class ARTrackedImg : MonoBehaviour
 
     void Awake()
     {
-        foreach( GameObject obj in _objectList)
+        foreach(GameObject obj in _objectList)
         {
             string tName = obj.name;
             _prefabDic.Add(tName,obj);
