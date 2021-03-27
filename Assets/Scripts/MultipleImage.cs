@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.UI;
-using System.Collections;
 
 
 
@@ -17,6 +16,7 @@ public class MultipleImage : MonoBehaviour
     public PlaceablePrefab[] objectlist;
     private Dictionary<string, GameObject> prefabDic = new Dictionary<string,GameObject>();
     public Camera camera;
+    
 
     void Awake() 
     {   
@@ -59,12 +59,13 @@ public class MultipleImage : MonoBehaviour
 
         foreach(ARTrackedImage img in eventArgs.removed)
         {
-            prefabDic[img.referenceImage.name].SetActive(false);
+            prefabDic[img.referenceImage.name].gameObject.SetActive(false);
         }
     }
 
     private void UpdateImage(ARTrackedImage img)
     {   
+        
         // tracked 된 이미지 이름 할당
         string imgName = img.referenceImage.name;
         // 해당 이미지의 이름과 같은 prefab 할당
@@ -74,15 +75,16 @@ public class MultipleImage : MonoBehaviour
         if(img.trackingState == TrackingState.Tracking)
         {   
             
+            // 버튼은 Canvas 2D로 Text는 3D로 구현 뒤, 버튼 숨김. => 훨씬 물리적 시각효과
             Vector3 screenPos = camera.WorldToScreenPoint(img.transform.position);
-            prefab.transform.position = new Vector3(screenPos.x, screenPos.y, prefab.transform.position.z);
+            prefab.GetComponent<RectTransform>().anchoredPosition = screenPos;
 
-            prefab.SetActive(true);
+            prefab.gameObject.SetActive(true);
         }
         // 이미지가 tracking에서 벗어난 상태일 경우 prefab disable
         else if(img.trackingState == TrackingState.Limited || img.trackingState == TrackingState.None)
         {
-            prefab.SetActive(false);    
+            prefab.gameObject.SetActive(false);    
         }
     }
 
