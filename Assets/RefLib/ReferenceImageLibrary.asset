@@ -21,7 +21,7 @@ MonoBehaviour:
     m_SerializedTextureGuid:
       m_GuidLow: 318241820760961230
       m_GuidHigh: 18049797543970525931
-    m_Size: {x: 0.3, y: 0.337875}
+    m_Size: {x: 0.1, y: 0.112625}
     m_SpecifySize: 1
     m_Name: The Milkmaid
     m_Texture: {fileID: 0}
@@ -31,7 +31,7 @@ MonoBehaviour:
     m_SerializedTextureGuid:
       m_GuidLow: 8364814890915987528
       m_GuidHigh: 11677459118321184666
-    m_Size: {x: 0.3, y: 0.34725}
+    m_Size: {x: 0.1, y: 0.11575}
     m_SpecifySize: 1
     m_Name: The Love Letter
     m_Texture: {fileID: 0}
@@ -41,7 +41,17 @@ MonoBehaviour:
     m_SerializedTextureGuid:
       m_GuidLow: 10684709395820784301
       m_GuidHigh: 3803631261767641209
-    m_Size: {x: 0.3, y: 0.358125}
+    m_Size: {x: 0.1, y: 0.119375005}
     m_SpecifySize: 1
     m_Name: Woman Reading a Letter
+    m_Texture: {fileID: 0}
+  - m_SerializedGuid:
+      m_GuidLow: 4666328673678588744
+      m_GuidHigh: 3177533194821544882
+    m_SerializedTextureGuid:
+      m_GuidLow: 8401708912603805558
+      m_GuidHigh: 2588540835902243705
+    m_Size: {x: 0.1, y: 0.113}
+    m_SpecifySize: 1
+    m_Name: Girl in a Large Hat
     m_Texture: {fileID: 0}

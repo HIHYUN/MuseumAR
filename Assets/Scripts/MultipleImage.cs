@@ -15,7 +15,8 @@ public class MultipleImage : MonoBehaviour
     // struct 구조 prefab
     public PlaceablePrefab[] objectlist;
     private Dictionary<string, GameObject> prefabDic = new Dictionary<string,GameObject>();
-    public Camera camera;
+    public new Camera detectCamera;
+    public GameObject canvas;
     
 
     void Awake() 
@@ -27,6 +28,7 @@ public class MultipleImage : MonoBehaviour
         foreach(PlaceablePrefab prefab in objectlist)
         {
             GameObject obj = Instantiate(prefab.prefab, Vector3.zero, Quaternion.identity);
+            obj.transform.SetParent(canvas.transform, false);
             obj.name =  prefab.name;
             prefabDic.Add(prefab.name, obj);
         }
@@ -76,8 +78,8 @@ public class MultipleImage : MonoBehaviour
         {   
             
             // 버튼은 Canvas 2D로 Text는 3D로 구현 뒤, 버튼 숨김. => 훨씬 물리적 시각효과
-            Vector3 screenPos = camera.WorldToScreenPoint(img.transform.position);
-            prefab.GetComponent<RectTransform>().anchoredPosition = screenPos;
+            Vector3 screenPos = detectCamera.WorldToScreenPoint(img.transform.position);
+            prefab.GetComponent<RectTransform>().position = screenPos;
 
             prefab.gameObject.SetActive(true);
         }
