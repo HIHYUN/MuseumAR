@@ -11,13 +11,17 @@ using TMPro;
 public class ImageTracking : MonoBehaviour
 {
     private ARTrackedImageManager trackedImageManager;
-    public GameObject HomeCanvas;
+    public GameObject PaintNameButton;
+    public GameObject ArtistNameButton;
+
     public List<Button> ArtButtonList = new List<Button>();
+
     public GameObject InformationCanvas;
     public TextMeshProUGUI ArtName;
     public TextMeshProUGUI ArtistName;
     public TextMeshProUGUI Date;
     public TextMeshProUGUI Description;
+
     private ArtJsonData JsonData;
     
     void Start() 
@@ -30,10 +34,9 @@ public class ImageTracking : MonoBehaviour
     {
         trackedImageManager = FindObjectOfType<ARTrackedImageManager>();
         
-        for (int i = 0; i < HomeCanvas.transform.childCount; i++)
+        for (int i = 0; i < PaintNameButton.transform.childCount; i++)
         {
-            Button bttn = HomeCanvas.transform.GetChild(i).GetComponent<Button>();
-            Instantiate(bttn,Vector3.zero, Quaternion.identity);
+            Button bttn = PaintNameButton.transform.GetChild(i).GetComponent<Button>();
             ArtButtonList.Add(bttn);
         }
 
