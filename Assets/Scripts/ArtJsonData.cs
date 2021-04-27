@@ -26,6 +26,7 @@ public class ArtJsonData
         public string artist;
         public string date;
         public string description;
+        public string human;
     }
 }
 

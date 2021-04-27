@@ -10,18 +10,13 @@ using DG.Tweening;
 
 public class InformationUI : MonoBehaviour
 {
-
-    public GameObject HomeCanvas;
-    public RectTransform InformationCanvas;
     public RectTransform InformationPanel;
     public Button CloseButton;
     public CanvasGroup AlphaBackground;
 
     public Button AudioPlayButton;
     public Button AudioPauseButton;
-    public GameObject AudioWaveFast;
-    public GameObject AudioWaveSlow;
-
+    public GameObject WaveBackground;
 
     private void Awake() 
     {
@@ -35,6 +30,7 @@ public class InformationUI : MonoBehaviour
         InformationPanel.transform.localPosition = new Vector3(0,-1300,0);
         InformationPanel.transform.DOLocalMoveY(0, 0.4f).SetEase(Ease.OutQuad);
         AlphaBackground.DOFade(1,0.4f).SetEase(Ease.OutQuad);
+        WaveBackground.gameObject.SetActive(false);
     }
 
     public void CloseInformationMotion()
@@ -46,15 +42,18 @@ public class InformationUI : MonoBehaviour
     {
         this.gameObject.SetActive(false);
     }
+
     public void PlayDocent()
     {
         AudioPlayButton.gameObject.SetActive(false);
         AudioPauseButton.gameObject.SetActive(true);
+        WaveBackground.gameObject.SetActive(true);
     }
 
     public void PauseDocent()
     {
         AudioPauseButton.gameObject.SetActive(false);
         AudioPlayButton.gameObject.SetActive(true);
+        WaveBackground.gameObject.SetActive(false);
     }
 }
