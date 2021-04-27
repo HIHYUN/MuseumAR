@@ -5,23 +5,31 @@ using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 
 [RequireComponent (typeof(ARTrackedImageManager))]
 public class ImageTracking : MonoBehaviour
 {
     private ARTrackedImageManager trackedImageManager;
-    public GameObject PaintNameButton;
-    public GameObject ArtistNameButton;
-
+    public GameObject PaintNameButtonList;
     public List<Button> ArtButtonList = new List<Button>();
 
-    public GameObject InformationCanvas;
-    public TextMeshProUGUI ArtName;
-    public TextMeshProUGUI ArtistName;
-    public TextMeshProUGUI Date;
-    public TextMeshProUGUI Description;
+    // Aritst Canvas 
+    public GameObject AritstCanvas;
+    public Button ArtistNameButton;
+    public TextMeshProUGUI ArtistNameButtonText;
+    public TextMeshProUGUI ArtistNameInAritstCanvas;
+    public TextMeshProUGUI ArtistHistoryInAritstCanvas;
 
+    // Information Canvas
+    public GameObject InformationCanvas;
+    public TextMeshProUGUI ArtNameInInformation;
+    public TextMeshProUGUI ArtistNameInInformation;
+    public TextMeshProUGUI DateInInformation;
+    public TextMeshProUGUI DescriptionInInformation;
+
+    // Get Json Data
     private ArtJsonData JsonData;
     
     void Start() 
@@ -34,9 +42,9 @@ public class ImageTracking : MonoBehaviour
     {
         trackedImageManager = FindObjectOfType<ARTrackedImageManager>();
         
-        for (int i = 0; i < PaintNameButton.transform.childCount; i++)
+        for (int i = 0; i < PaintNameButtonList.transform.childCount; i++)
         {
-            Button bttn = PaintNameButton.transform.GetChild(i).GetComponent<Button>();
+            Button bttn = PaintNameButtonList.transform.GetChild(i).GetComponent<Button>();
             ArtButtonList.Add(bttn);
         }
 
@@ -44,6 +52,8 @@ public class ImageTracking : MonoBehaviour
         {
             button.onClick.AddListener(() => OpenInformationCanvas(button.name));
         }
+
+        ArtistNameButton.onClick.AddListener(OpenArtistCanvas);
     }
 
     void OnEnable() 
@@ -57,20 +67,30 @@ public class ImageTracking : MonoBehaviour
 
     private void OnImageChanged(ARTrackedImagesChangedEventArgs eventArgs)
     {
+        
         foreach(ARTrackedImage img in eventArgs.added)
         {
             UpdateImage(img);
         }
-
         foreach(ARTrackedImage img in eventArgs.updated)
         {
             UpdateImage(img);
         }
-
         foreach(ARTrackedImage img in eventArgs.removed)
         {
             ArtButtonList.Find(b => b.name == img.referenceImage.name).gameObject.SetActive(false);
+            ArtistNameButton.gameObject.SetActive(false);
         }
+
+        if(eventArgs.updated.Count ==1)
+        {
+            AlertArtistButton(eventArgs.updated[0].referenceImage.name);
+        }
+        else
+        {
+            ArtistNameButton.gameObject.SetActive(false);
+        }
+        
     }
     private void UpdateImage(ARTrackedImage img)
     {   
@@ -104,11 +124,31 @@ public class ImageTracking : MonoBehaviour
         {
             if (json.name == buttonname)
             {
-                ArtName.text = json.name;
-                ArtistName.text = json.artist;
-                Date.text = json.date;
-                Description.text = json.description;
+                ArtNameInInformation.text = json.name;
+                ArtistNameInInformation.text = json.artist;
+                DateInInformation.text = json.date;
+                DescriptionInInformation.text = json.description;
             }
         } 
+    }
+    private void AlertArtistButton(string buttonname)
+    {
+        foreach (ArtJsonData.Data json in JsonData.data)
+        {
+            if (json.name == buttonname)
+            {
+                ArtistNameButtonText.text = json.artist;
+
+                ArtistNameInAritstCanvas.text = json.artist;
+                ArtistHistoryInAritstCanvas.text = json.human;
+            }
+        }
+        ArtistNameButton.gameObject.SetActive(true);
+    }
+
+    private void OpenArtistCanvas()
+    {
+        ArtistNameButton.gameObject.SetActive(false);
+        AritstCanvas.gameObject.SetActive(true);
     }
 }
