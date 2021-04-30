@@ -22,11 +22,9 @@ public class ImageTracking : MonoBehaviour
     public TextMeshProUGUI ArtistNameInAritstCanvas;
     public TextMeshProUGUI ArtistHistoryInAritstCanvas;
     public TextMeshProUGUI ImageInformation;
+    public GameObject ParentImageList;
+    public GameObject ArtistImagePrefab;
     private List<string> aboutlist = new List<string>();
-    public GameObject ParentImageButton;
-    public GameObject ImageButtonPrefab;
-    private List<Button> WhoImageList = new List<Button>();
-    
 
     // Information Canvas
     public GameObject InformationCanvas;
@@ -160,33 +158,23 @@ public class ImageTracking : MonoBehaviour
                         
                         foreach(ArtistJsonData.Image img in ajson.image)
                         {   
-                            ImageInformation.text = img.about;
-                            GameObject imgbttnO = Instantiate(ImageButtonPrefab) as GameObject;
-                            imgbttnO.transform.SetParent(ParentImageButton.transform);
-                            imgbttnO.transform.localScale = Vector3.one;
-                            imgbttnO.transform.localPosition = new Vector3(600, 0, 0);
-                            Button imgbttn = imgbttnO.GetComponent(typeof(Button)) as Button;
-
-                            WhoImageList.Add(imgbttn);
                             aboutlist.Add(img.about);
                         }
                     }
                 }
             }
         }
-        for (int i =0; i < WhoImageList.Count; i++)
+        for (int i = aboutlist.Count-1; 0 <= i; i--)
         {   
-            string path = "Image/Artist/" + ArtistNameInAritstCanvas.text+ i.ToString();
+            GameObject imgO = Instantiate(ArtistImagePrefab) as GameObject;
+            imgO.transform.SetParent(ParentImageList.transform);
+            imgO.transform.localScale = Vector3.one;
+            imgO.transform.localPosition = new Vector3(0, 0, 0);
+            Image imgp = imgO.GetComponent(typeof(Image)) as Image;
 
-            if(i ==0)
-            {
-                WhoImageList[i].GetComponent<RectTransform>().localPosition = Vector3.zero;
-                WhoImageList[i].gameObject.transform.Find("Artist Image").GetComponent<Image>().sprite = Resources.Load<Sprite>(path) as Sprite;
-            }
-            else
-            {
-                WhoImageList[i].gameObject.transform.Find("Artist Image").GetComponent<Image>().sprite = Resources.Load<Sprite>(path) as Sprite;
-            }
+            string path = "Image/Artist/" + ArtistNameInAritstCanvas.text+ i.ToString();
+            imgp.sprite = Resources.Load<Sprite>(path) as Sprite;
+            ImageInformation.text = aboutlist[i];
         }
         ArtistNameButton.gameObject.SetActive(true);
     }

@@ -20,6 +20,7 @@ public class ArtistJsonData
     {
         public string url;
         public string about;
+        public string story;
     }
 }
 
