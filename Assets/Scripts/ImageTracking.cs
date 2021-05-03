@@ -24,7 +24,8 @@ public class ImageTracking : MonoBehaviour
     public TextMeshProUGUI ImageInformation;
     public GameObject ParentImageList;
     public GameObject ArtistImagePrefab;
-    private List<string> aboutlist = new List<string>();
+    public static List<string> aboutlist = new List<string>();
+    public static List<string> storylist = new List<string>();
 
     // Information Canvas
     public GameObject InformationCanvas;
@@ -91,7 +92,7 @@ public class ImageTracking : MonoBehaviour
             ArtistNameButton.gameObject.SetActive(false);
         }
 
-        if(eventArgs.updated.Count ==1)
+        if(eventArgs.updated.Count == 1 && eventArgs.updated[0].trackingState == TrackingState.Tracking)
         {
             AlertArtistButton(eventArgs.updated[0].referenceImage.name);
         }
@@ -159,6 +160,7 @@ public class ImageTracking : MonoBehaviour
                         foreach(ArtistJsonData.Image img in ajson.image)
                         {   
                             aboutlist.Add(img.about);
+                            storylist.Add(img.story);
                         }
                     }
                 }
@@ -189,28 +191,4 @@ public class ImageTracking : MonoBehaviour
     {
         Docent.clip = Resources.Load<AudioClip>("Audio/" + artname);
     }
-    
-    /*
-    IEnumerator SetSprite(string url, int i)
-    {
-
-        UnityWebRequest wr = new UnityWebRequest(url);
-        DownloadHandlerTexture texDl = new DownloadHandlerTexture(true);
-        wr.downloadHandler = texDl;
-        wr.timeout = 3;
-        yield return wr.SendWebRequest();
-
-        Texture2D tex = texDl.texture;
-        WhoImageList[i].gameObject.transform.Find("Artist Image").GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(0,0, tex.width, tex.height), Vector2.one * 0.5f);        
-    }
-
-    IEnumerator GetAudioClip(string audiourl) 
-    {
-        using (var uwr = UnityWebRequestMultimedia.GetAudioClip(audiourl, AudioType.MPEG)) 
-        {
-            yield return uwr.SendWebRequest();
-        
-            Docent.clip = DownloadHandlerAudioClip.GetContent(uwr);
-        }
-    }   */
 }

@@ -6,7 +6,6 @@ using UnityEngine.XR.ARSubsystems;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
-using UnityEngine.Networking;
 
 public class Text : MonoBehaviour
 {
@@ -18,11 +17,11 @@ public class Text : MonoBehaviour
     public TextMeshProUGUI ImageInformation;
     public GameObject ParentImageList;
     public GameObject ArtistImagePrefab;
-    private List<string> aboutlist = new List<string>();
+    public static List<string> aboutlist = new List<string>();
+    public static List<string> storylist = new List<string>();
 
 
     // Json
-    private List<string> urllist = new List<string>();
     private ArtJsonData PaintJsonData;
     private ArtistJsonData WhoJsonData;
 
@@ -54,6 +53,7 @@ public class Text : MonoBehaviour
                         foreach(ArtistJsonData.Image img in ajson.image)
                         {   
                             aboutlist.Add(img.about);
+                            storylist.Add(img.story);
                         }
                     }
                 }
@@ -73,18 +73,4 @@ public class Text : MonoBehaviour
         }
         ArtistNameButton.gameObject.SetActive(true);
     }
-
-    /*
-    IEnumerator SetSprite(string url, int i)
-    {
-
-        UnityWebRequest wr = new UnityWebRequest(url);
-        DownloadHandlerTexture texDl = new DownloadHandlerTexture(true);
-        wr.downloadHandler = texDl;
-        wr.timeout = 1;
-        yield return wr.SendWebRequest();
-
-        Texture2D tex = texDl.texture;
-        WhoImageList[i].gameObject.transform.Find("Artist Image").GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(0,0, tex.width, tex.height), Vector2.one * 0.5f);        
-    }*/
 }
