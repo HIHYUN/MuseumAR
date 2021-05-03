@@ -5,7 +5,7 @@ using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.UI;
 using TMPro;
-using DG.Tweening;
+using UnityEngine.Networking;
 
 
 [RequireComponent (typeof(ARTrackedImageManager))]
@@ -13,7 +13,7 @@ public class ImageTracking : MonoBehaviour
 {
     private ARTrackedImageManager trackedImageManager;
     public GameObject PaintNameButtonList;
-    public List<Button> ArtButtonList = new List<Button>();
+    private List<Button> ArtButtonList = new List<Button>();
 
     // Aritst Canvas 
     public GameObject AritstCanvas;
@@ -21,6 +21,11 @@ public class ImageTracking : MonoBehaviour
     public TextMeshProUGUI ArtistNameButtonText;
     public TextMeshProUGUI ArtistNameInAritstCanvas;
     public TextMeshProUGUI ArtistHistoryInAritstCanvas;
+    public TextMeshProUGUI ImageInformation;
+    public GameObject ParentImageList;
+    public GameObject ArtistImagePrefab;
+    public static List<string> aboutlist = new List<string>();
+    public static List<string> storylist = new List<string>();
 
     // Information Canvas
     public GameObject InformationCanvas;
@@ -28,19 +33,24 @@ public class ImageTracking : MonoBehaviour
     public TextMeshProUGUI ArtistNameInInformation;
     public TextMeshProUGUI DateInInformation;
     public TextMeshProUGUI DescriptionInInformation;
+    public AudioSource Docent;
 
     // Get Json Data
-    private ArtJsonData JsonData;
-    
+    private ArtJsonData PaintJsonData;
+    private ArtistJsonData WhoJsonData;
     void Start() 
     {
-        TextAsset jsonFile = Resources.Load("MuseumInformation") as TextAsset;
-        JsonData = JsonUtility.FromJson<ArtJsonData>(jsonFile.text);  
+        TextAsset pjsonFile = Resources.Load("MuseumInformation") as TextAsset;
+        PaintJsonData = JsonUtility.FromJson<ArtJsonData>(pjsonFile.text);  
+
+        TextAsset ajsonFile = Resources.Load("ArtistInformation") as TextAsset;
+        WhoJsonData = JsonUtility.FromJson<ArtistJsonData>(ajsonFile.text);  
     }
 
     void Awake()
     {
         trackedImageManager = FindObjectOfType<ARTrackedImageManager>();
+
         
         for (int i = 0; i < PaintNameButtonList.transform.childCount; i++)
         {
@@ -82,7 +92,7 @@ public class ImageTracking : MonoBehaviour
             ArtistNameButton.gameObject.SetActive(false);
         }
 
-        if(eventArgs.updated.Count ==1)
+        if(eventArgs.updated.Count == 1 && eventArgs.updated[0].trackingState == TrackingState.Tracking)
         {
             AlertArtistButton(eventArgs.updated[0].referenceImage.name);
         }
@@ -113,14 +123,13 @@ public class ImageTracking : MonoBehaviour
         else if(img.trackingState == TrackingState.Limited || img.trackingState == TrackingState.None)
         {
             ClickButton.gameObject.SetActive(false);
+            ArtistNameButton.gameObject.SetActive(false);
         }
     }
 
     private void OpenInformationCanvas(string buttonname)
     {
-        InformationCanvas.SetActive(true);
-
-        foreach (ArtJsonData.Data json in JsonData.data)
+        foreach (ArtJsonData.Data json in PaintJsonData.data)
         {
             if (json.name == buttonname)
             {
@@ -128,20 +137,46 @@ public class ImageTracking : MonoBehaviour
                 ArtistNameInInformation.text = json.artist;
                 DateInInformation.text = json.date;
                 DescriptionInInformation.text = json.description;
+                GetAudio(json.name);
+                //StartCoroutine(GetAudioClip(json.audio));
             }
         } 
+        InformationCanvas.SetActive(true);
     }
     private void AlertArtistButton(string buttonname)
     {
-        foreach (ArtJsonData.Data json in JsonData.data)
+        foreach (ArtJsonData.Data pjson in PaintJsonData.data)
         {
-            if (json.name == buttonname)
+            if (pjson.name == buttonname)
             {
-                ArtistNameButtonText.text = json.artist;
-
-                ArtistNameInAritstCanvas.text = json.artist;
-                ArtistHistoryInAritstCanvas.text = json.human;
+                foreach(ArtistJsonData.Artist ajson in WhoJsonData.artist)
+                {
+                    if(ajson.name == pjson.artist)
+                    {
+                        ArtistNameButtonText.text = ajson.name;
+                        ArtistNameInAritstCanvas.text = ajson.name;
+                        ArtistHistoryInAritstCanvas.text = ajson.history;
+                        
+                        foreach(ArtistJsonData.Image img in ajson.image)
+                        {   
+                            aboutlist.Add(img.about);
+                            storylist.Add(img.story);
+                        }
+                    }
+                }
             }
+        }
+        for (int i = aboutlist.Count-1; 0 <= i; i--)
+        {   
+            GameObject imgO = Instantiate(ArtistImagePrefab) as GameObject;
+            imgO.transform.SetParent(ParentImageList.transform);
+            imgO.transform.localScale = Vector3.one;
+            imgO.transform.localPosition = new Vector3(0, 0, 0);
+            Image imgp = imgO.GetComponent(typeof(Image)) as Image;
+
+            string path = "Image/Artist/" + ArtistNameInAritstCanvas.text+ i.ToString();
+            imgp.sprite = Resources.Load<Sprite>(path) as Sprite;
+            ImageInformation.text = aboutlist[i];
         }
         ArtistNameButton.gameObject.SetActive(true);
     }
@@ -150,5 +185,10 @@ public class ImageTracking : MonoBehaviour
     {
         ArtistNameButton.gameObject.SetActive(false);
         AritstCanvas.gameObject.SetActive(true);
+    }
+
+    public void GetAudio(string artname)
+    {
+        Docent.clip = Resources.Load<AudioClip>("Audio/" + artname);
     }
 }

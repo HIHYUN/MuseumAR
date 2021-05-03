@@ -55,3 +55,13 @@ MonoBehaviour:
     m_SpecifySize: 1
     m_Name: Girl in a Large Hat
     m_Texture: {fileID: 0}
+  - m_SerializedGuid:
+      m_GuidLow: 5485395289943779829
+      m_GuidHigh: 14308205964529096109
+    m_SerializedTextureGuid:
+      m_GuidLow: 17644256578272445758
+      m_GuidHigh: 3285153055093454777
+    m_Size: {x: 0.1, y: 0.1}
+    m_SpecifySize: 1
+    m_Name: Self Portrait
+    m_Texture: {fileID: 0}

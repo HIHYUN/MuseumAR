@@ -17,6 +17,7 @@ public class InformationUI : MonoBehaviour
     public Button AudioPlayButton;
     public Button AudioPauseButton;
     public GameObject WaveBackground;
+    public AudioSource Docent;
 
     private void Awake() 
     {
@@ -48,6 +49,7 @@ public class InformationUI : MonoBehaviour
         AudioPlayButton.gameObject.SetActive(false);
         AudioPauseButton.gameObject.SetActive(true);
         WaveBackground.gameObject.SetActive(true);
+        Docent.Play();
     }
 
     public void PauseDocent()
@@ -55,5 +57,6 @@ public class InformationUI : MonoBehaviour
         AudioPauseButton.gameObject.SetActive(false);
         AudioPlayButton.gameObject.SetActive(true);
         WaveBackground.gameObject.SetActive(false);
+        Docent.Pause();
     }
 }
