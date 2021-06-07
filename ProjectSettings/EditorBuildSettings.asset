@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/DocentAR.unity
-    guid: bc15e125a444b4c0d8d92227839a8a05
+    path: Assets/Scenes/DocentARTest.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 00233549b545c4c1197e277eae58d396, type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: f2e784cd893f346428e8707d99b14609, type: 2}
